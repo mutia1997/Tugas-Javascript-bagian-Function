@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Tebak Angka</title>
+</head>
+<body>
+  <script>
+    let scorePlayer1 = 0;
+    let scorePlayer2 = 0;
+    let round = 1;
+    const maxRounds = 5;
+
+    function startGame() {
+      alert(`Selamat datang di game tebak angka!
+Kamu diminta untuk menebak angka 1 - 3. Dan kamu akan bermain dalam 5 ronde.
+Player yang berhasil mengumpulkan tebakan terbanyak akan menang. SELAMAT BERMAIN!!!`);
+
+      while (round <= maxRounds) {
+        const targetNumber = Math.floor(Math.random() * 3) + 1;
+        let player1Guess = getPlayerGuess(1);
+        let player2Guess = getPlayerGuess(2, player1Guess);
+
+        if (player1Guess === targetNumber && player2Guess === targetNumber) {
+          alert("Tidak ada yang benar, hasil SERI.");
+        } else if (player1Guess === targetNumber) {
+          alert("Player 1 Win");
+          scorePlayer1++;
+        } else if (player2Guess === targetNumber) {
+          alert("Player 2 Win");
+          scorePlayer2++;
+        } else {
+          alert("Tidak ada yang benar, hasil SERI.");
+        }
+
+        showScore(targetNumber);
+
+        if (round < maxRounds) {
+          if (!confirm(`Lanjut Ronde ${round + 1}?`)) {
+            alert("Permainan selesai. Terima kasih sudah bermain!");
+            break;
+          }
+        }
+
+        round++;
+      }
+
+      alert("Permainan selesai! Berikut hasil akhirnya:");
+      showFinalScore();
+    }
+
+    function getPlayerGuess(playerNumber, otherPlayerGuess = null) {
+      while (true) {
+        let guess = prompt(`Player ${playerNumber} masukkan angka:`);
+
+        if (guess === null) {
+          alert("Permainan dibatalkan.");
+          throw "Game cancelled";
+        }
+
+        guess = Number(guess);
+
+        if (isNaN(guess)) {
+          if (!confirm("Hanya boleh memasukkan angka.\n\nUlangi?")) {
+            alert("Permainan dibatalkan.");
+            throw "Game cancelled";
+          }
+        } else if (guess < 1) {
+          if (!confirm("Angka tidak boleh kurang dari 1.\n\nUlangi?")) {
+            alert("Permainan dibatalkan.");
+            throw "Game cancelled";
+          }
+        } else if (guess > 3) {
+          if (!confirm("Angka tidak boleh lebih dari 3.\n\nUlangi?")) {
+            alert("Permainan dibatalkan.");
+            throw "Game cancelled";
+          }
+        } else if (guess === otherPlayerGuess) {
+          if (!confirm("Angka tidak boleh sama dengan Player 1.\n\nUlangi?")) {
+            alert("Permainan dibatalkan.");
+            throw "Game cancelled";
+          }
+        } else {
+          return guess;
+        }
+      }
+    }
+
+    function showScore(targetNumber) {
+      alert(`Nilai yang dicari: ${targetNumber}\n---------------------\n- Player 1: ${scorePlayer1}\n- Player 2: ${scorePlayer2}`);
+    }
+
+    function showFinalScore() {
+      alert(`Hasil Akhir:\n---------------------\n- Player 1: ${scorePlayer1}\n- Player 2: ${scorePlayer2}`);
+    }
+    startGame();
+  </script>
+</body>
+</html>
